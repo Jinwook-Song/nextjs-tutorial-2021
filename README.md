@@ -1,3 +1,14 @@
+# Next JS
+
+## create-next-app
+
+- 컴파일과 번들링이 자동으로 된다. (webpack, babel)
+- 자동 리프레쉬 기능
+- 서버 사이드 렌더링 지원
+- 스태틱 파일 지원
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
