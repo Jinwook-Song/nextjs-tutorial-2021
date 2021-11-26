@@ -3,7 +3,7 @@ import Axios from "axios";
 
 import Item from "../../src/component/item";
 
-const Post = ({ item }) => {
+const Post = ({ item, name }) => {
   return (
     <>
       {item ? (
@@ -12,6 +12,7 @@ const Post = ({ item }) => {
             <title>{item.name}</title>
             <meta name="description" content={item.description}></meta>
           </Head>
+          {name} 환경 입니다.
           <Item item={item} />
         </>
       ) : null}
@@ -21,7 +22,7 @@ const Post = ({ item }) => {
 
 export default Post;
 
-// 서버사이드 렌더링
+// 서버사이드 렌더링 (node)
 export const getServerSideProps = async (context) => {
   const id = context.params.id;
   const appUrl = `http://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
@@ -31,6 +32,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       item: data,
+      name: process.env.name,
     },
   };
 };
