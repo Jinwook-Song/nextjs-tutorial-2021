@@ -4,51 +4,39 @@ import { useEffect, useState } from "react";
 import ItemList from "../src/component/ItemList";
 import { Divider, Header, Loader } from "semantic-ui-react";
 
-export default function Home() {
-  const [list, setList] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
-
-  // browser 환경
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  const getData = () => {
-    Axios.get(API_URL).then((res) => {
-      console.log(res.data);
-      setList(res.data);
-      setIsloading(false);
-    });
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function Home({ list }) {
   return (
     <div>
       <Head>
         <title>Home | NextJS</title>
         <meta name="description" content="Nextjs tutorial."></meta>
       </Head>
-      {isLoading ? (
-        <div style={{ padding: "40vh 0" }}>
-          <Loader inline="centered" active>
-            Loading...
-          </Loader>
-        </div>
-      ) : (
-        <>
-          <Header style={{ marginTop: 20 }} as="h3">
-            베스트 상품
-          </Header>
-          <Divider />
-          <ItemList list={list.slice(0, 9)} />
-          <Header style={{ marginTop: 20 }} as="h3">
-            신상품
-          </Header>
-          <Divider />
-          <ItemList list={list.slice(9)} />
-        </>
-      )}
+      <>
+        <Header style={{ marginTop: 20 }} as="h3">
+          베스트 상품
+        </Header>
+        <Divider />
+        <ItemList list={list.slice(0, 9)} />
+        <Header style={{ marginTop: 20 }} as="h3">
+          신상품
+        </Header>
+        <Divider />
+        <ItemList list={list.slice(9)} />
+      </>
     </div>
   );
 }
+
+// pre-rendering (static)
+export const getStaticProps = async () => {
+  const apiURL = process.env.apiUrl;
+  const res = await Axios(apiURL);
+  const data = res.data;
+
+  return {
+    props: {
+      list: data,
+      name: process.env.name,
+    },
+  };
+};
