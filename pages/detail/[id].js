@@ -1,12 +1,22 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Axios from "axios";
 
 import Item from "../../src/component/item";
+import { Loader } from "semantic-ui-react";
 
 const Post = ({ item, name }) => {
+  const router = useRouter();
+
   return (
     <>
-      {item ? (
+      {router.isFallback ? (
+        <div style={{ padding: "40vh 0" }}>
+          <Loader active inline="centered">
+            Loading...
+          </Loader>
+        </div>
+      ) : (
         <>
           <Head>
             <title>{item.name}</title>
@@ -15,7 +25,7 @@ const Post = ({ item, name }) => {
           {name} 환경 입니다.
           <Item item={item} />
         </>
-      ) : null}
+      )}
     </>
   );
 };
@@ -23,12 +33,20 @@ const Post = ({ item, name }) => {
 export default Post;
 
 export const getStaticPaths = async () => {
+  const apiURL = process.env.apiUrl;
+  const res = await Axios(apiURL);
+  const data = res.data;
   return {
-    paths: [
-      { params: { id: "740" } },
-      { params: { id: "730" } },
-      { params: { id: "729" } },
-    ],
+    // paths: [
+    //   { params: { id: "740" } },
+    //   { params: { id: "730" } },
+    //   { params: { id: "729" } },
+    // ],
+    paths: data.slice(0, 9).map((item) => ({
+      params: {
+        id: item.id.toString(),
+      },
+    })),
     fallback: true,
   };
 };
